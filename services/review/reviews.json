@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "sku": "abc",
+    "author": "Mark",
+    "text": "This product is great!"
+  },
+  {
+    "id": 2,
+    "sku": "abc",
+    "author": "Nick",
+    "text": "This product is so cool!"
+  },
+  {
+    "id": 3,
+    "sku": "abc",
+    "author": "Charlie",
+    "text": "This product is rad!"
+  },
+  {
+    "id": 4,
+    "sku": "def",
+    "author": "Jack",
+    "text": "This product is super!"
+  },
+  {
+    "id": 5,
+    "sku": "def",
+    "author": "Connor",
+    "text": "This product is amazing!"
+  },
+  {
+    "id": 6,
+    "sku": "ghi",
+    "author": "John",
+    "text": "This product is sweet!"
+  }
+]

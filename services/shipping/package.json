@@ -1,0 +1,14 @@
+{
+  "name": "carousels",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@apollo/federation": "^0.36",
+    "apollo-server": "^2.21",
+    "graphql": "^15",
+    "graphql-relay": "^0.10",
+    "graphql-tools": "^7.0.4",
+    "node-fetch": "^2.6.0"
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "sku": "abc",
+    "name": "ABC Product",
+    "brandId": 1
+  },
+  {
+    "sku": "def",
+    "name": "DEF Product",
+    "brandId": 1
+  },
+  {
+    "sku": "ghi",
+    "name": "GHI Product",
+    "brandId": 2
+  },
+  {
+    "sku": "jkl",
+    "name": "JKL Product",
+    "brandId": 2
+  }
+]

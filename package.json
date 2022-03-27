@@ -1,0 +1,25 @@
+{
+  "name": "inject-directive-poc",
+  "main": "gateway.js",
+  "scripts": {
+    "start:gateway": "sleep 5s && nodemon gateway.js",
+    "start:service:product": "nodemon services/product/index.js",
+    "start:service:review": "nodemon services/review/index.js",
+    "start:service:shipping": "nodemon services/shipping/index.js",
+    "start:service:brand": "nodemon services/brand/index.js",
+    "start:services": "concurrently \"yarn:start:service:*\" \"yarn:start:gateway\"",
+    "postinstall": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "concurrently": "latest",
+    "lerna": "latest",
+    "nodemon": "latest"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^0.23.2",
+    "apollo-server": "^2.21.0",
+    "graphql": "^15",
+    "node-fetch": "^2.6.0",
+    "prettier": "^1.19.1"
+  }
+}
