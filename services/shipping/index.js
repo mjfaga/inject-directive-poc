@@ -19,8 +19,6 @@ class InjectDirective extends SchemaDirectiveVisitor {
     field.inject = {fields: this.args.fields, mode: this.args.mode};
 
     field.resolve = async function(parent, args, context, info) {
-      // Faking id injection since we can't automatically inject without modifying gateway query plan
-      const id = toGlobalId(parent.__typename, parent.sku);
       const injectInvoke = (/*customHeaders, variables, etc.*/) => {
         log(
           `Executing additional gateway query to get '${field.inject.fields}'`
@@ -28,17 +26,16 @@ class InjectDirective extends SchemaDirectiveVisitor {
         const body = {
           query: `
             query InvokeDirective($id: ID!) {
-              # In order for this to work, we need to always select 'id' field during initial execution when this directive is used
+              # In order for this to work, we need to always @require 'id' field during initial execution when this directive is used
               node(id: $id) {
-                # we would use information from the field when setting up this directive to set this up
-                ... on Product {
+                ... on ${info.parentType} {
                   id
                   ${field.inject.fields}
                 }
               }
             }`,
           variables: {
-            id,
+            id: parent.id,
           },
         };
         // track executing the fetch
@@ -82,14 +79,16 @@ const SYNC = `
       @requires(fields: "name")
 `;
 
+// Need to @require 'id' field in order to execute node query for async resolution
 // Runs in Subgraph (option to optimize into Gatway in future)
 const ASYNC = `
-      @inject(fields: "name", mode: ASYNC)
+      @requires(fields: "id") @inject(fields: "name", mode: ASYNC)
 `;
 
+// Need to @require 'id' field in order to execute node query for async resolution
 // Runs in Subgraph always
 const INVOKE = `
-      @inject(fields: "name", mode: INVOKE)
+      @requires(fields: "id") @inject(fields: "name", mode: INVOKE)
 `;
 
 let directiveType = '';
@@ -113,6 +112,7 @@ const typeDefs = gql`
     INVOKE
   }
 
+  # Could make this repeatable as well. Would need to handle promise/invokation injection differently though.
   directive @inject(fields: String!, mode: InjectMode!) on FIELD_DEFINITION
 
   type ShippingEstimate {
@@ -124,6 +124,11 @@ const typeDefs = gql`
     sku: String! @external
     # Needed for @requires when it's used
     ${process.env.INJECT_MODE === 'SYNC' ? 'name: String! @external' : ''}
+    ${
+      process.env.INJECT_MODE && process.env.INJECT_MODE !== 'SYNC'
+        ? 'id: ID! @external'
+        : ''
+    }
     shippingEstimate(zipcode: String!): ShippingEstimate ${directiveType}
   }
 `;
